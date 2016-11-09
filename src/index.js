@@ -24,29 +24,40 @@ function nameContainsNumbers(fullName) {
   }
 }
 
-function procName(firstName) {
-  return firstName.charAt(0).toUpperCase() + '.';
+function procName(curName) {
+  return curName.toLowerCase().charAt(0).toUpperCase() + '.';
+}
+
+function procFamily(familyName) {
+  return familyName.charAt(0).toUpperCase() +
+  familyName.slice(1).toLowerCase();
 }
 
 
+
 app.get('/task2B', (req, res) => {
+  //console.log(req.query.fullname);
   if (req.query.fullname.length == 0)
     return res.send('Invalid fullname');
   if (nameContainsNumbers(req.query.fullname))
     return res.send('Invalid fullname');
+
   let iofArr = (req.query.fullname).split(' ');
+  iofArr = iofArr.filter(value => {return value != ''});
+  //console.log(iofArr.length.toString());
   switch(iofArr.length) {
     case 1: {
-      res.send(iofArr[0]);
+      res.send(procFamily(iofArr[0]));
       break;
     }
     case 2: {
-      const familyName = iofArr[1] + ' ' + procName(iofArr[0]);
+      const familyName = procFamily(iofArr[1]) + ' '
+      + procName(iofArr[0]);
       res.send(familyName);
       break;
     }
     case 3: {
-     const fio = iofArr[2] + ' ' + procName(iofArr[0])
+     const fio = procFamily(iofArr[2]) + ' ' + procName(iofArr[0])
      + ' ' + procName(iofArr[1]);
      res.send(fio);
      break;
